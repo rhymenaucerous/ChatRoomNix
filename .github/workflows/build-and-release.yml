@@ -37,6 +37,7 @@ jobs:
           ./build.sh
 
       - name: Build Python package
+        working-directory: ${{ github.workspace }}
         run: poetry build
 
       - name: Upload artifacts
