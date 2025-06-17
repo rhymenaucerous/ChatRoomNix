@@ -10,7 +10,6 @@ requires-python = ">=3.13"
 dependencies = [
     "vardorvis_cmd @ git+https://github.com/rhymenaucerous/vardorvis.git"
 ]
-packages = [{include = "ChatRoomClient"}]
 
 [project.scripts]
 chat = "ChatRoomClient.cr_client:main"

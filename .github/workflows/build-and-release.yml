@@ -38,7 +38,10 @@ jobs:
 
       - name: Build Python package
         working-directory: ${{ github.workspace }}
-        run: poetry build
+        run: |
+              pwd
+              ls -la
+              poetry build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
