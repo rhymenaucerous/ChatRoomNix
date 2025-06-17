@@ -1,0 +1,11 @@
+Server Listening Hostname/IP:
+192.168.56.101
+
+Server Listening Port:
+1234
+
+Max room count:
+5
+
+Max client count:
+10

@@ -1,0 +1,23 @@
+[project]
+name = "ChatRoomClient"
+version = "0.1.0"
+description = "A custom command line interface chat server. Demonstrates basic networking concepts in C and python. Also Demonstrates some important data structures utilizing the standard C library."
+authors = [
+    {name = "rhymenaucerous",email = "christopher.r.elliott94@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "vardorvis_cmd @ git+https://github.com/rhymenaucerous/vardorvis.git"
+]
+
+[project.scripts]
+chat = "ChatRoomClient.cr_client:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3.7"
+pytest = "^8.4.0"
