@@ -31,7 +31,7 @@ jobs:
         run: pip install poetry
 
       - name: Build C elf file
-        working-directory: ChatRoomServer
+        working-directory: chatroomserver
         run: |
           chmod +x build.sh
           ./build.sh
@@ -47,15 +47,19 @@ jobs:
         with:
           name: release-artifacts
           path: |
-            ChatRoomServer/build/chat_room
+            chatroomserver/build/chat_room
+            chatroomserver/config.txt
+            chatroomserver/users.txt
+            chatroomserver/gen_certs_run.sh
             dist/*.whl
+
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ChatRoomServer/build/chat_room
+            chatroomserver/build/chat_room
             dist/*.whl
           generate_release_notes: true
         env:
