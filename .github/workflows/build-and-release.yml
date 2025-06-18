@@ -42,9 +42,7 @@ jobs:
 
       - name: Build Python package
         working-directory: ${{ github.workspace }}
-        run: |
-          poetry build --no-interaction
-          mv dist/*.whl ../
+        run: poetry build --no-interaction
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -55,7 +53,7 @@ jobs:
             config.txt
             users.txt
             gen_certs_run.sh
-            *.whl
+            dist/*.whl
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -66,7 +64,7 @@ jobs:
             config.txt
             users.txt
             gen_certs_run.sh
-            *.whl
+            dist/*.whl
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
