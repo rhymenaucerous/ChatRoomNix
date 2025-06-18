@@ -35,20 +35,26 @@ jobs:
         run: |
           chmod +x build.sh
           ./build.sh
+          mv build/chat_room ../chatroom
+          mv config.txt ../
+          mv users.txt ../
+          mv gen_certs_run.sh ../
 
       - name: Build Python package
         working-directory: ${{ github.workspace }}
-        run: poetry build --no-interaction
+        run: |
+          poetry build --no-interaction
+          mv dist/*.whl ../
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-artifacts
           path: |
-            chatroomserver/build/chat_room
-            chatroomserver/config.txt
-            chatroomserver/users.txt
-            chatroomserver/gen_certs_run.sh
+            chat_room
+            config.txt
+            users.txt
+            gen_certs_run.sh
             dist/*.whl
 
 
@@ -57,8 +63,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            chatroomserver/build/chat_room
-            dist/*.whl
+            chat_room
+            config.txt
+            users.txt
+            gen_certs_run.sh
+            *.whl
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

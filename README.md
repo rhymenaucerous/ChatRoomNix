@@ -1,6 +1,8 @@
 # Chat Room
 ### Version 1.0.0
 
+[GIF of Chat Server Running]
+
 # 1. Chat Room overview
 
 A custom command line interface chat server. Demonstrates basic networking concepts in C and python. Also Demonstrates some important data structures utilizing the standard C library.
