@@ -35,7 +35,7 @@ jobs:
         run: |
           chmod +x build.sh
           ./build.sh
-          mv build/chat_room ../chatroom
+          mv build/chat_room ../
           mv config.txt ../
           mv users.txt ../
           mv gen_certs_run.sh ../
@@ -55,8 +55,7 @@ jobs:
             config.txt
             users.txt
             gen_certs_run.sh
-            dist/*.whl
-
+            *.whl
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
