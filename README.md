@@ -1,21 +1,68 @@
-# Chat Room
+# ChatRoom
 ### Version 1.0.0
 
-[GIF of Chat Server Running]
+<img src="./readme_pics/chatroom.gif" width="800" height="525">
 
-# 1. Chat Room overview
+<br>
+
+# 1. User guide
+
+For first time users of the chat room, please see guidance on client and server usage below! All that's needed are the release files for running both the server and then client.
+
+### 1.1 Server:
+
+The server needs a users.txt file, a config.txt file, and certificate files in order to run. The gen_certs_run.sh script will automate the generation of unsigned certificates, allowing encryption through the openssl library.
+
+The config text file should follow the following example exactly as the program reads the line numbers 2, 5, 8, and 11 and uses the information as long as the IP and Port numbers are valid, and max rooms and clients are within the ranges identified in cr_chared.h. Those defaults are also shown below.
+
+![alt text](readme_pics/config_txt.png)
+
+*Figure 1. Configuration file example.*
+
+The users.txt file will not be changed between runs of the chat room server and can be changed manually. The format of user:password\n must be adhered to or the server will not run. Alternatively, sign in as the admin and accounts can be deleted as necessary (any connection can register users). The users.txt file should not be renamed either or another file will be created during run with the name users.txt and anyone could create the admin account with the correct priviledges.
+
+![alt text](readme_pics/users_txt.png)
+
+*Figure 2. Users.txt example.*
+
+Once the certificates, configuration file, and users file are set up (feel free to stick with the defaults), the executable can be run by simply using `./chat_room`
+
+### 1.2 Client:
+
+The client startup is simple, run the commands below. 
+
+```
+pip install pip install chatroomclient-1.0.0-py3-none-any.whl
+chatroom
+```
+
+For a look at some more of the commands and example run, see the video below.
+
+[Link to example video of client usage.](readme_pics/chatroom.mp4)
+
+<br>
+
+If you want to run this server outside of a closed network/subnet, a valid certificate would be requried. My recommendation, for a smaller project like this, is let's encrypt.
+
+### 1.3 Line endings note:
+
+If the files are editted via the windows environment, the line endings will render the server unable to run. This can be resolved by using dos2unix to switch the files back.
+
+<br>
+
+# 2. Chat Room overview
 
 A custom command line interface chat server. Demonstrates basic networking concepts in C and python. Also Demonstrates some important data structures utilizing the standard C library.
 
 ![alt text](readme_pics/cr_overview.png)
 
-*Figure 1. Chat Room overview flowchart.*
+*Figure 3. Chat Room overview flowchart.*
 
-# 2. Message protocols
+# 3. Message protocols
 
 The following message protocols are used for chat room communications. Most messages have opcodes request (to the server) and acknowledge/reject (to the client), but the packet type and subtype identify what communications are occuring. If the packet is of type reject, the packet will also include a reject code. Request packets of type/sub-type account-register, account-login, account-admin, account-delete, rooms-create, rooms-delete, rooms-join, and chat-chat will also contain char arrays that identify username/password/room name. The servers room-join-acknowledge and chat-chat-acknowldge will also have larger packets with 3 byte headers.
 
-### 2.1 Packet type codes
+### 3.1 Packet type codes
 
 |||
 |-|-|
@@ -27,7 +74,7 @@ The following message protocols are used for chat room communications. Most mess
 
 <br>
 
-### 2.2 Sub-types:
+### 3.2 Sub-types:
 |||
 |-|-|
 |Join|0x00|
@@ -46,7 +93,7 @@ The following message protocols are used for chat room communications. Most mess
 
 <br>
 
-### 2.3 Opcodes:
+### 3.3 Opcodes:
 |||
 |-|-|
 |Request|0x00|
@@ -57,7 +104,7 @@ The following message protocols are used for chat room communications. Most mess
 
 <br>
 
-### 2.4 Reject codes:
+### 3.4 Reject codes:
 ||||
 |-|-|-|
 |Server Busy|0x00|Server is unable to take anymore clients|
@@ -85,63 +132,19 @@ The following message protocols are used for chat room communications. Most mess
 
 <br>
 
-# 3. User guide
+# 4. Testing
 
-For first time users of the chat room, please see guidance on client and server usage below!
+To test the serveer/client pair, start the server and then run:
 
-### 3.1 Server:
+```
+pytest -s test_client.py
+```
 
-The config text file should follow the following example exactly as the program reads the line numbers 2, 5, 8, and 11 and uses the information as long as the IP and Port numbers are valid, and max rooms and clients are within the ranges identified in cr_chared.h. Those defaults are also shown below.
-
-![alt text](readme_pics/config_txt.png)
-
-*Figure 2. Configuration file example.*
-
-![alt text](readme_pics/cr_shared_attributes.png)
-
-*Figure 3. Server attributes set in cr_shared.h.*
-
-Once the configuration file is set up (feel free to stick with the defaults), the executable can be run by simply using `./chat_room`
-
-The users.txt file will not be changed between runs of the chat room server and can be changed manually. The format of user:password\n must be adhered to or the server will not run. Alternatively, sign in as the admin and accounts can be deleted as necessary (any connection can register users). The users.txt file should not be renamed either or another file will be created during run with the name users.txt and anyone could create the admin account with the correct priviledges.
-
-![alt text](readme_pics/users_txt.png)
-
-*Figure 4. Users.txt example.*
-
-The required files for compiling the chat room executable are shown in the figure below. The cr_shared.h file is included in all other chat room header files. All modular libraries (cll, queue, thread pool, hash table, and algorithms libs) are included in this shared header filer.
-
-![alt text](readme_pics/cr_src_file_struct.png)
-
-*Figure 5. Chat Room Server folder file structure.*
-
-### 3.2 Client:
-
-[Link to example video of client usage.](readme_pics/example.mp4)
-
-### 3.3 SSL Certificate
-
-The server must get a verified certificate to be able to be verified by clients. With the current implementation of the client, a self signed certificate will do, as the client is programmed not to check. To get the implementation to work, simply use the following commands to generate the files server.key and server.crt. For production use, a certificate should be obtained from a trusted/valid CA.
-
-`openssl genpkey -algorithm RSA -out server.key`
+This requires a running server and there fore tests both functionality of the client and server at once.
 
 <br>
 
-`openssl req -new -key server.key -out server.csr`
-
-<br>
-
-`openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt`
-
-<br>
-
-### 3.4 Line endings note:
-
-If the files are editted via the windows environment, the line endings will render the server unable to run. This can be resolved by using dos2unix to switch the files back.
-
-<br>
-
-# 4. Further recommended improvements to Chat Room
+# 5. Further recommended improvements to Chat Room
 
 1. The list of users present in a room should be sent to users upon joining the chat room.
 2. Enable client and server functionality to sends files to each other.
@@ -166,16 +169,13 @@ The chat server uses a thread pool but each new client requires it's own thread.
 
 # 6. Developer Dependencies
 
-See below for dependencies on the linux OS, where the server must be built.
+See below for dependencies on the linux OS, where the server must be built. I would aso recommend installation of valgrind to check for memory leaks.
 
-sudo apt install valgrind
-
+```
 sudo apt install cmake
-
 sudo apt-get install -y libssl-dev
-
 sudo apt-get install -y libcunit1-dev
-
+```
 
 <br>
 
